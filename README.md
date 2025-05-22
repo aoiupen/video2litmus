@@ -12,9 +12,9 @@
 
 |        | 영상1 | 영상2 |
 |:------:|:-----:|:-----:|
-| **유튜브 썸네일** | [![영상1](https://img.youtube.com/vi/qIygxFUTo-A/maxresdefault.jpg)](https://youtu.be/bXEXqcsBPYU?feature=shared) | [![영상2](https://img.youtube.com/vi/bXEXqcsBPYU/maxresdefault.jpg)](timeline_1color_h) |
-| **20색 타임라인** | ![image/timeline_20colors_f.png](image/timeline_20colors_f.png) | ![image/timeline_20colors_h.png](image/timeline_20colors_h.png) |
-| **1색 타임라인** | ![timeline_1color_f.png](image/timeline_1color_f.png) | ![timeline_1color_h.png](image/timeline_1color_h.png) |
+| **영상** | [![영상1](https://img.youtube.com/vi/qIygxFUTo-A/maxresdefault.jpg)](https://youtu.be/bXEXqcsBPYU?feature=shared) | [![영상2](https://img.youtube.com/vi/bXEXqcsBPYU/maxresdefault.jpg)](timeline_1color_h) |
+| **20색<br>타임라인** | ![image/timeline_20colors_f.png](image/timeline_20colors_f.png) | ![image/timeline_20colors_h.png](image/timeline_20colors_h.png) |
+| **1색<br>타임라인** | ![timeline_1color_f.png](image/timeline_1color_f.png) | ![timeline_1color_h.png](image/timeline_1color_h.png) |
 
 - **유튜브 썸네일**: 클릭 시 해당 영상으로 이동합니다.
 - **20색 타임라인**: 각 프레임의 상위 20개 색상을 비율에 따라 세로 막대(리트머스 바)로 표현, 시간 순서대로 이어붙인 결과
