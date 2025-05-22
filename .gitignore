@@ -175,3 +175,5 @@ cython_debug/
 
 # Sample
 sample/*
+.st_tmp_frames/*
+design/*

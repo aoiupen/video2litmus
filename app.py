@@ -1,9 +1,8 @@
 import streamlit as st
 import os
 import cv2
-import numpy as np
 from PIL import Image
-from mv_color_timeline import extract_frames, extract_main_colors, plot_litmus_bar
+from mv_color_timeline import extract_main_colors, plot_litmus_bar
 
 # 썸네일 이미지 크기(예: 320px)에 맞춰 전체 앱 너비 고정
 THUMBNAIL_WIDTH = 320
@@ -40,23 +39,36 @@ st.markdown(
 uploaded_file = st.file_uploader("분석할 영상 파일 업로드", type=["mp4"])
 
 if uploaded_file:
-    # 임시 폴더 생성
     os.makedirs(".st_tmp_frames", exist_ok=True)
     video_path = os.path.join(".st_tmp_frames", "uploaded.mp4")
     with open(video_path, "wb") as f:
         f.write(uploaded_file.read())
-    # 프레임 추출
+
+    # 전체 프레임 수 구하기
+    cap = cv2.VideoCapture(video_path)
+    total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+    cap.release()
+
     num_frames = st.slider("분석할 프레임 개수", 10, 100, 30)
-    frame_paths = extract_frames(video_path, ".st_tmp_frames", num_frames=num_frames)
-    st.success(f"총 {len(frame_paths)}개 프레임 추출 완료!")
-    # 프레임 선택
-    frame_idx = st.slider("분석할 프레임 위치", 0, len(frame_paths)-1, 0)
-    frame_img = Image.open(frame_paths[frame_idx])
-    st.image(frame_img, caption=f"프레임 {frame_idx}", width=THUMBNAIL_WIDTH)
-    # 상위 색상 개수 슬라이더
+    frame_pos = st.slider("분석할 프레임 위치", 0, num_frames-1, 0)
     n_colors = st.slider("상위 색상 개수", 1, 20, 10)
-    colors, counts = extract_main_colors(frame_paths[frame_idx], n_colors=n_colors)
-    # 리트머스 막대 시각화(메모리상 생성)
-    bar_img_path = os.path.join(".st_tmp_frames", "bar_tmp.png")
-    plot_litmus_bar(colors, counts, bar_img_path, width=THUMBNAIL_WIDTH, height=300)
-    st.image(bar_img_path, caption=f"상위 {n_colors}개 색상 리트머스 막대") 
+
+    # 실제 분석할 프레임 인덱스 계산
+    frame_idx = int(total_frames * frame_pos / num_frames)
+
+    # 해당 프레임만 추출
+    cap = cv2.VideoCapture(video_path)
+    cap.set(cv2.CAP_PROP_POS_FRAMES, frame_idx)
+    ret, frame = cap.read()
+    cap.release()
+    if ret:
+        frame_img_path = os.path.join(".st_tmp_frames", "current_frame.png")
+        cv2.imwrite(frame_img_path, frame)
+        frame_img = Image.open(frame_img_path)
+        st.image(frame_img, caption=f"프레임 {frame_idx}", width=THUMBNAIL_WIDTH)
+        colors, counts = extract_main_colors(frame_img_path, n_colors=n_colors)
+        bar_img_path = os.path.join(".st_tmp_frames", "bar_tmp.png")
+        plot_litmus_bar(colors, counts, bar_img_path, width=THUMBNAIL_WIDTH, height=300)
+        st.image(bar_img_path, caption=f"상위 {n_colors}개 색상 리트머스 막대")
+    else:
+        st.error("프레임을 추출할 수 없습니다.") 
