@@ -6,27 +6,26 @@
 
 ## Key Features
 
-- **Dual UI support: Streamlit & Gradio (adapter pattern)**
-- **Frame extraction and caching at regular intervals**
-- **KMeans-based extraction and ratio calculation of top N colors per frame**
-- **Litmus bar (vertical color bar) visualization for each frame**
-- **Toggle between single/accumulated litmus bar modes**
-- **Sliders for frame count, frame position, and number of colors**
-- **Cross-platform: Gradio and Streamlit UI selectable (adapter pattern)**
-- **Platform launcher (main.py) to select UI via web**
+1. Dual UI & Platform Support
+   - Streamlit & Gradio UI support (adapter pattern, MVVM)
+   - Cross-platform: Selectable UI via main.py launcher
+
+2. Video Processing & Color Extraction
+   - Frame extraction and caching at regular intervals
+   - KMeans-based extraction and ratio calculation of top N colors per frame
+
+3. Visualization & Interaction
+   - Litmus bar (vertical color bar) visualization for each frame
+   - Toggle between single/accumulated litmus bar modes
+   - Sliders for frame count, frame position, and number of colors
 
 ## Gradio vs Streamlit: Framework Comparison
 
-| Gradio | Streamlit |
-|--------|-----------|
-| Web-based ML/data app framework | Web-based data app/dashboard framework |
-| Fast ML demo, interactive UI | Fast data visualization, interactive app |
-| 3-column horizontal layout, image download/zoom | 2-column + bottom controls, vertical layout |
-| Real-time reactive (onchange), various widgets | Real-time reactive (onchange), various widgets |
-| Image/file upload & download | Image/file upload |
-| Deploy: HuggingFace Spaces, etc. | Deploy: Streamlit Cloud, etc. |
-| Python only, simple code | Python only, simple code |
----
+| Feature/Platform         | Gradio                                   | Streamlit                        |
+|-------------------------|------------------------------------------|----------------------------------|
+| **Real-time reactive (onchange)** | **Supported**                        |                                  |
+| Typical use             | ML demo, interactive data app            | Data dashboard, analytics app     |
+| Python support          | Yes                                      | Yes                              |
 
 ## Gradio UI Example
 
@@ -38,7 +37,7 @@
 
 ## UI Change Example (Slider/Mode)
 
-<img src="image/gradio2.png" width="400"/> <img src="image/streamlit2.png" width="400"/>
+<img src="image/gradio2.png" width="400"/>
 
 ---
 
