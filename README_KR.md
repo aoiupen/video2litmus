@@ -1,10 +1,8 @@
-# 영상 색상 타임라인 시각화 (Video Color Timeline Visualization)
+# video2litmus
 
 ## 프로젝트 개요
 
-이 프로젝트는 Python 기반 도구로, 영상의 각 프레임에서 주요 색상을 추출해 타임라인으로 시각화함으로써 영상의 전체 색상 분위기와 변화를 한눈에 보여줍니다. 영상의 색상 팔레트가 시간에 따라 어떻게 변하는지 직관적으로 파악할 수 있습니다.
-
----
+**크로스플랫폼 영상 색상 타임라인 시각화 도구**: Python 기반으로, 뮤직비디오(또는 일반 영상)의 전체 분위기를 한 장의 색상 타임라인 이미지로 추출·시각화할 수 있습니다. MVVM 어댑터 패턴을 통해 **Gradio**와 **Streamlit** UI를 모두 지원합니다.
 
 ## 주요 기능
 
@@ -14,8 +12,33 @@
 - **프레임별 리트머스 바(세로 색상 바) 시각화**
 - **단일/누적 리트머스 바 모드 토글**
 - **프레임 개수, 위치, 색상 개수 슬라이더 제공**
-- **Gradio: 3열(프레임|리트머스|설정) 가로 배치, Streamlit: 세로 배치**
+- **크로스플랫폼: Gradio/Streamlit UI 선택 사용(adpater 패턴)**
 - **main.py 플랫폼 런처로 웹에서 UI 선택 실행**
+
+## Gradio vs Streamlit: 프레임워크 비교
+
+| Gradio | Streamlit |
+|--------|-----------|
+| 웹 기반 ML/데이터 앱 프레임워크 | 웹 기반 데이터 앱/대시보드 프레임워크 |
+| 빠른 ML 데모, 인터랙티브 UI | 빠른 데이터 시각화, 대화형 앱 |
+| 3열 가로 배치, 이미지 다운로드/확대 | 2열+하단 컨트롤, 세로 배치 |
+| 실시간 반응형(onchange), 다양한 위젯 | 실시간 반응형(onchange), 다양한 위젯 |
+| 이미지/파일 업로드 및 다운로드 | 이미지/파일 업로드 |
+| HuggingFace Spaces 등 배포 | Streamlit Cloud 등 배포 |
+| Python만으로 간단하게 구현 | Python만으로 간단하게 구현 |
+---
+
+## Gradio UI 예시
+
+<img src="image/gradio.png" width="600"/>
+
+## Streamlit UI 예시
+
+<img src="image/streamlit.png" width="600"/>
+
+## UI 변화 예시 (슬라이더/모드)
+
+<img src="image/gradio2.png" width="400"/> <img src="image/streamlit2.png" width="400"/>
 
 ---
 
@@ -45,18 +68,9 @@
 
 - `view_gradio.py` : Gradio UI 뷰
 - `view_streamlit.py` : Streamlit UI 뷰
-- `main.py` : Flask 기반 UI 런처(웹에서 Gradio/Streamlit 선택)
+- `viewmodel.py` : 분석 로직, View와 Model 연결
 - `model.py` : 색상 추출, 리트머스 바 생성, 프레임 추출 등 핵심 함수
+- `main.py` : Flask 기반 UI 런처(웹에서 Gradio/Streamlit 선택)
 - `.st_tmp_frames/` : 임시 프레임/리트머스 바 이미지 저장 폴더
 
 ---
-
-## 참고/활용 예시
-
-- 각 프레임별 주요 색상 타임라인, 누적/단일 리트머스 바 비교, 디버그 콘솔 활용 등
-- 포트폴리오, 실전 데이터 분석, 영상 색상 트렌드 분석 등에 활용 가능
-
----
-
-## 업데이트 내역
-- 2025-05-23: Streamlit/Gradio 구조 싱크, 누적/단일 리트머스 모드, adapter 구조 통합 등 최신화 

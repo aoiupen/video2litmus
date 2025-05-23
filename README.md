@@ -1,10 +1,8 @@
-# Video Color Timeline Visualization
+# video2litmus
 
 ## Project Overview
 
-This project is a Python-based tool that visualizes the overall color mood and transitions of a video by extracting the main colors from each frame and displaying them as a timeline. You can intuitively understand how the color palette of a video changes over time.
-
----
+**Cross-platform video color timeline visualizer**: A Python-based tool to extract and visualize the overall mood of a music video (or any video) as a single color timeline image. Supports both **Gradio** and **Streamlit** UIs via MVVM adapter pattern.
 
 ## Key Features
 
@@ -14,8 +12,33 @@ This project is a Python-based tool that visualizes the overall color mood and t
 - **Litmus bar (vertical color bar) visualization for each frame**
 - **Toggle between single/accumulated litmus bar modes**
 - **Sliders for frame count, frame position, and number of colors**
-- **Gradio: 3-column (Frame | Litmus | Controls) horizontal layout, Streamlit: vertical layout**
+- **Cross-platform: Gradio and Streamlit UI selectable (adapter pattern)**
 - **Platform launcher (main.py) to select UI via web**
+
+## Gradio vs Streamlit: Framework Comparison
+
+| Gradio | Streamlit |
+|--------|-----------|
+| Web-based ML/data app framework | Web-based data app/dashboard framework |
+| Fast ML demo, interactive UI | Fast data visualization, interactive app |
+| 3-column horizontal layout, image download/zoom | 2-column + bottom controls, vertical layout |
+| Real-time reactive (onchange), various widgets | Real-time reactive (onchange), various widgets |
+| Image/file upload & download | Image/file upload |
+| Deploy: HuggingFace Spaces, etc. | Deploy: Streamlit Cloud, etc. |
+| Python only, simple code | Python only, simple code |
+---
+
+## Gradio UI Example
+
+<img src="image/gradio.png" width="600"/>
+
+## Streamlit UI Example
+
+<img src="image/streamlit.png" width="600"/>
+
+## UI Change Example (Slider/Mode)
+
+<img src="image/gradio2.png" width="400"/> <img src="image/streamlit2.png" width="400"/>
 
 ---
 
@@ -39,12 +62,11 @@ This project is a Python-based tool that visualizes the overall color mood and t
 4. **Check Results**
    - Use the UI to view frame images, litmus bars, adjust sliders, and toggle modes
 
----
-
 ## Code Structure
 
 - `view_gradio.py` : Gradio UI view
 - `view_streamlit.py` : Streamlit UI view
-- `main.py` : Flask-based UI launcher (choose Gradio/Streamlit in browser)
+- `viewmodel.py` : Analysis logic, connects View and Model
 - `model.py` : Core functions for color extraction, litmus bar generation, frame extraction, etc.
-- `.st_tmp_frames/`
+- `main.py` : Flask-based UI launcher (choose Gradio/Streamlit in browser)
+- `.st_tmp_frames/` : Temporary storage for frame/litmus bar images
