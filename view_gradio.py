@@ -3,7 +3,7 @@ import os
 import cv2
 import shutil
 from viewmodel import analyze_frame, analyze_accumulated_bar
-from mv_color_timeline import extract_main_colors
+from model import extract_main_colors
 import time
 
 def extract_and_cache_frames(video_path, num_frames, tmp_dir, min_resize_pixels=20):
@@ -48,6 +48,7 @@ def gradio_ui():
                 n_colors = gr.Slider(1, 20, value=10, step=1, label="Top N Colors")
                 frame_pos = gr.Slider(0, 0, value=0, step=1, label="Frame Position (auto)")
                 mode_toggle = gr.Radio(["단일 리트머스", "누적 리트머스"], value="단일 리트머스", label="리트머스 모드", info="오른쪽 리트머스 바를 누적/단일로 전환")
+
         state = gr.State({"frame_paths": [], "total_frames": 0})
 
         def on_upload(video, num_frames, n_colors):
@@ -62,27 +63,24 @@ def gradio_ui():
 
         def on_change(state, frame_pos, n_colors, mode_toggle):
             frame_paths = state["frame_paths"]
-            print(f"[on_change] frame_pos={frame_pos}, n_colors={n_colors}, mode_toggle={mode_toggle}")
-            print(f"[on_change] frame_paths={frame_paths}")
             if not frame_paths:
-                print("[on_change] frame_paths is empty!")
                 return None, None
             min_side = max(8, int((n_colors) ** 0.5) + 1)
+            frame_path = os.path.normpath(frame_paths[frame_pos])
             if mode_toggle == "누적 리트머스":
                 _, bar_img_path = analyze_accumulated_bar(
                     state["video_path"], frame_pos, len(frame_paths), n_colors,
                     tmp_dir=".st_tmp_frames", width=25, height=300
                 )
-                frame_img_path = frame_paths[frame_pos] if os.path.exists(frame_paths[frame_pos]) else None
-                bar_img_path_with_query = f"{bar_img_path}?t={int(time.time()*1000)}"
-                print(f"[on_change] 누적모드 frame_img_path={frame_img_path}, bar_img_path={bar_img_path_with_query}", flush=True)
-                return frame_img_path, bar_img_path_with_query
+                frame_img_path = frame_path if os.path.exists(frame_path) else None
+                return frame_img_path, bar_img_path
             else:
                 frame_img_path, bar_img_path = analyze_frame(
                     state["video_path"], frame_pos, len(frame_paths), n_colors,
-                    tmp_dir=".st_tmp_frames", width=320, height=300, resize=(min_side, min_side)
+                    tmp_dir=".st_tmp_frames", width=320, height=300
                 )
-                print(f"[on_change] 단일모드 frame_img_path={frame_img_path}, bar_img_path={bar_img_path}")
+                frame_img_path = os.path.normpath(frame_img_path) if frame_img_path else None
+                bar_img_path = os.path.normpath(bar_img_path) if bar_img_path else None
                 return frame_img_path, bar_img_path
 
         video_file.change(

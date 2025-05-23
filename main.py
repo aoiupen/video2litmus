@@ -17,11 +17,11 @@ server_processes = {}
 
 def run_gradio():
     # Gradio 서버 실행
-    subprocess.Popen([sys.executable, "adapter_gradio.py"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    subprocess.Popen([sys.executable, "view_gradio.py"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 def run_streamlit():
     # Streamlit 서버 실행
-    subprocess.Popen(["streamlit", "run", "adapter_streamlit.py"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    subprocess.Popen(["streamlit", "run", "view_streamlit.py"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 @app.route("/")
 def index():
