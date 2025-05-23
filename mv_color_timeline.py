@@ -67,17 +67,35 @@ def process_frames(frame_dir, out_dir, n_colors=20):
         bar_paths_1.append(bar_path_1)
     return bar_paths_20, bar_paths_1
 
-def concat_bars(bar_paths, out_path, direction='horizontal', final_aspect_ratio=None):
+def concat_bars(bar_paths, out_path, direction='horizontal', final_aspect_ratio=None, total_bars=None, bar_width=25, bar_height=300):
     images = [Image.open(p) for p in bar_paths]
     widths, heights = zip(*(img.size for img in images))
     if direction == 'horizontal':
-        total_width = sum(widths)
+        # 누적 모드에서 bar_paths가 부족하면 오른쪽에 격자 무늬로 채우기
+        if total_bars is not None and len(bar_paths) < total_bars:
+            total_width = total_bars * bar_width
+        else:
+            total_width = sum(widths)
         max_height = max(heights)
         new_img = Image.new('RGB', (total_width, max_height), (255,255,255))
         x_offset = 0
         for img in images:
             new_img.paste(img, (x_offset, 0))
             x_offset += img.size[0]
+        # 오른쪽 빈 공간 격자 무늬로 채우기
+        if total_bars is not None and len(bar_paths) < total_bars:
+            checker_width = (total_bars - len(bar_paths)) * bar_width
+            checker = Image.new('RGB', (checker_width, bar_height), (255,255,255))
+            # 격자 무늬 그리기
+            tile = 10
+            for y in range(0, bar_height, tile):
+                for x in range(0, checker_width, tile):
+                    color = (220,220,220) if (x//tile + y//tile)%2==0 else (255,255,255)
+                    for dy in range(tile):
+                        for dx in range(tile):
+                            if x+dx < checker_width and y+dy < bar_height:
+                                checker.putpixel((x+dx, y+dy), color)
+            new_img.paste(checker, (x_offset, 0))
     else:
         max_width = max(widths)
         total_height = sum(heights)
@@ -96,6 +114,7 @@ def concat_bars(bar_paths, out_path, direction='horizontal', final_aspect_ratio=
             target_w = int(h * 16 / 9)
         new_img = new_img.resize((target_w, target_h), Image.LANCZOS)
     new_img.save(out_path)
+    return new_img.copy()
 
 # 영상에서 균등 간격으로 프레임 추출하여 PNG로 저장하는 함수
 # video_path: 입력 영상 경로
